@@ -1,0 +1,52 @@
+<header class="bg-white">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a [routerLink]="'/home'" class="-m-1.5 p-1.5">
+          <span class="sr-only"></span>
+          <img class="h-8 w-auto" src="/assets/images/_Pngtree_books_logo_4135427-removebg-preview (1).png" alt="">
+        </a>
+      </div>
+      
+      <div class="hidden lg:flex lg:gap-x-12">
+        <div *ngFor="let path of routes">
+            <a [routerLink]="path.Path" class="text-sm font-semibold leading-6 text-gray-900">{{path.ComponentName}}</a>
+        </div>
+        <a *ngIf="this.appstate.AuthState.user.role=='ADMIN'" [routerLink]="['/admin']" routerLinkActive="router-link-active"  class="text-sm font-semibold leading-6 text-gray-900">Dashboard</a>
+      </div>       
+        
+      <div class=" lg:flex lg:gap-x-7 lg:flex-1 lg:justify-end">
+        <div class="lg:flex lg:gap-x-7" *ngIf="this.appstate.AuthState.isAuthenticated==false">
+          <a [routerLink]="['/signup']" class="text-sm font-semibold leading-6 text-gray-900">Sign Up</a>
+          <a [routerLink]="['/login']" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        </div>  
+        <div>
+          <div class="flex -space-x-2  overflow-hidden" *ngIf="this.appstate.AuthState.isAuthenticated==true">
+            <div class="flex items-center space-between">
+              <a class="flex items-center hover:text-gray-200" [routerLink]="['/cart']">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              <span class="flex absolute -mt-5 ml-4">
+                <span class="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-pink-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-pink-500">
+                  </span>
+                </span>
+              </a>
+              <div class="flex items-center ml-10">
+                <span class="m-4">{{this.appstate.AuthState.user.username}}</span>
+              <a [routerLink]="['/profile']" routerLinkActive="router-link-active" ><img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""></a>  
+              </div>
+              <a
+              (click)="HandleLogout()"
+              class="text-sm ml-10 font-semibold leading-6 text-gray-900"
+            >
+              Logout
+            </a>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
