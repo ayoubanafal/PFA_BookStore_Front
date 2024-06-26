@@ -40,19 +40,13 @@
                 </div>
   
                 <div class="sm:col-span-4">
-                  <label for="username" class="block text-sm font-medium leading-6 text-gray-900">Image Url</label>
-                  <div class="mt-2">
-                    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                      <input formControlName="imageUrl" type="text" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Image Url">
-                    </div>
-                  </div>
+                  <label for="Images" class="block text-sm font-medium leading-6 text-gray-900">Multiple Files To Upload</label>
+        <label class="btn btn-default p-0">
+          <input type="file" multiple (change)="selectFiles($event)" />
+        </label>
                 </div>
-                <div>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-                  <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                  id="file_input" type="file"
-                  (change)="selectFile($event)">
-                </div>
+                
+                
               </div>
             </div>
           </div>      

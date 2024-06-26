@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+//import { Router } from '@angular/router';
+
 import { Book } from 'src/app/Models/book.model';
 import { BookService } from 'src/app/services/book.service';
 import { UploadService } from 'src/app/services/upload.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-update-book',
@@ -15,7 +18,7 @@ export class UpdateBookComponent implements OnInit {
 
   selectedFile?: File;
   selectedFileName: string ="";
-
+  selectedFiles?: FileList;
   BookForm!:FormGroup;
   bookId!:number;
 
@@ -52,40 +55,89 @@ export class UpdateBookComponent implements OnInit {
     )
   }
 
-  selectFile(event: any) {
-    this.selectedFile = event?.target.files[0];
+  // selectFile(event: any) {
+  //   this.selectedFile = event?.target.files[0];
     
-    this.selectedFileName = this.selectedFile?.name || '';
+  //   this.selectedFileName = this.selectedFile?.name || '';
   
-    console.log(this.selectedFileName);
+  //   console.log(this.selectedFileName);
+  // }
+  
+
+  // OnSubmit() {
+  //   if (this.selectedFile) {
+  //     this.uploadFile.uploadImage(this.selectedFile).subscribe(
+  //         (data)=>{
+  //             console.log(data)
+  //         },
+  //         (error)=>{
+  //             console.log(error)
+  //         }
+  //     )
+  //   }
+  //   if(this.BookForm.valid){
+  //     let book:Book = this.BookForm.value
+  //     this.bookService.updateBook(book,this.bookId).subscribe(
+  //     {
+  //       next:data=>{
+  //           this.router.navigateByUrl(`/admin`)
+  //       },
+  //       error:err=>{
+  //         console.log(err);
+  //       }
+  //     }
+  //     )
+  //   }
+  //   }
+
+
+  selectFiles(event: any): void {
+    this.selectedFiles = event.target.files;
+    console.log(this.selectFiles)
   }
   
 
+
   OnSubmit() {
-    if (this.selectedFile) {
-      this.uploadFile.uploadImage(this.selectedFile).subscribe(
-          (data)=>{
-              console.log(data)
-          },
-          (error)=>{
-              console.log(error)
+    let book:Book=this.BookForm.value;
+    if (this.selectedFiles) {
+      if (!Array.isArray(book.imageUrl)) {
+        book.imageUrl = [];
           }
-      )
+          for (let i = 0; i < this.selectedFiles.length; i++) {
+              book.imageUrl[i] = `${environment.API_URL}/Images/files/${this.selectedFiles[i].name}`;
+          }
+          console.log(book.imageUrl);
+            this.bookService.saveBookWithImage(book).subscribe({
+              next:data=>{
+                console.log(data);
+                if (this.selectedFiles) {
+                  for (let i = 0; i < this.selectedFiles.length; i++) {
+                  this.uploadFile.uploadImage(this.selectedFiles[i]).subscribe(
+                      (data)=>{
+                          console.log(data)
+                          
+                      },
+                      (error)=>{
+                          console.log(error)
+                      }
+                  )
+                }}
+                this.router.navigateByUrl(`/admin`);
+              },
+              error:err=>{
+                console.log(err);
+              }
+            })
+            
     }
-    if(this.BookForm.valid){
-      let book:Book = this.BookForm.value
-      this.bookService.updateBook(book,this.bookId).subscribe(
-      {
-        next:data=>{
-            this.router.navigateByUrl(`/admin`)
-        },
-        error:err=>{
-          console.log(err);
-        }
-      }
-      )
-    }
-    }
+    // this.bookService.saveBook(book).subscribe({
+    //   next : data=>{
+    //     console.log(data);
+    //   }
+    // });
+  }
+
 
     handleCancel() {
       this.router.navigateByUrl(`/admin`)
